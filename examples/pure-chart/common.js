@@ -218,11 +218,10 @@ export const getGuideArray = (max, height, numberOfPoints = 5) => {
     x = 10 * x / first
   }
 
-  for (let i = 1; i < numberOfPoints + 1; i++) {
+  for (let i = 0; i < numberOfPoints + 1; i++) {
     let v = x / numberOfPoints * i
     arr.push([v + postfix, v * temp / max * height, 1 * temp / max * height])
   }
-
   return arr
 }
 
@@ -241,14 +240,16 @@ export const drawYAxis = (color = '#e0e0e0') => {
 }
 
 export const drawYAxisLabels = (arr, height, minValue, color = '#000000') => {
+  var topMargin = 50;
   return (
     <View style={{
       width: 33,
-      height: height,
+      height: height+topMargin,
       justifyContent: 'flex-end',
       alignItems: 'flex-end',
       marginBottom: minValue && arr && arr.length > 0 ? -1 * arr[0][2] * minValue : null,
-      overflow: 'hidden'
+      overflow: 'hidden',
+      zIndex: 99999999,
     }}>
 
       {arr.length === 0 ? (
@@ -261,13 +262,13 @@ export const drawYAxisLabels = (arr, height, minValue, color = '#000000') => {
           <Text style={{fontSize: 11}}>0</Text>
         </View>
       ) : arr.map((v, i) => {
-        if (v[1] > height) return null
         return (
           <View
             key={'guide' + i}
             style={{
-              bottom: v[1] - 5,
-              position: 'absolute'
+              bottom: v[1] - 3,
+              position: 'absolute',
+              zIndex: 999999,
             }}>
             <Text style={{fontSize: 11, color: color}}>{v[0]}</Text>
           </View>
