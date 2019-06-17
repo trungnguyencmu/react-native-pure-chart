@@ -74,7 +74,7 @@ export const initData = (dataProp, height, gap, numberOfPoints = 5, maxValue) =>
     }
   }
 
-  max = maxValue
+  max = maxValue ? maxValue : 100
   guideArray = getGuideArray(max, height, numberOfPoints)
 
   dataProp = flattenData(dataProp)

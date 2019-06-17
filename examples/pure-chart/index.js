@@ -33,6 +33,7 @@ PureChart.propTypes = {
   data: PropTypes.array.isRequired,
   color: PropTypes.string,
   height: PropTypes.number,
+  maxValue: PropTypes.number,
   numberOfYAxisGuideLine: PropTypes.number,
   customValueRenderer: PropTypes.func,
   backgroundColor: PropTypes.string
