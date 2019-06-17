@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, TouchableWithoutFeedback, Text, Animated, Easing, ScrollView, StyleSheet } from 'react-native'
-import {initData, drawYAxis, drawGuideLine, drawYAxisLabels, numberWithCommas, drawXAxis, drawXAxisLabels} from '../common'
+import {initData, drawYAxis, drawGuideLine, drawYAxisLabels,drawYAxisLabelsFrom0To100,drawGuideLineFrom0To100, numberWithCommas, drawXAxis, drawXAxisLabels} from '../common'
 
 class LineChart extends React.Component {
   constructor (props) {
     super(props)
-    let newState = initData(this.props.data, this.props.height, this.props.gap, this.props.numberOfYAxisGuideLine)
+    let newState = initData(this.props.data, this.props.height, this.props.gap, this.props.numberOfYAxisGuideLine, this.props.maxValue)
     this.state = {
       loading: false,
       sortedData: newState.sortedData,
@@ -19,7 +19,6 @@ class LineChart extends React.Component {
       fadeAnim: new Animated.Value(0),
       guideArray: newState.guideArray
     }
-
     this.drawCoordinates = this.drawCoordinates.bind(this)
     this.drawCoordinate = this.drawCoordinate.bind(this)
     this.drawSelected = this.drawSelected.bind(this)
@@ -43,7 +42,7 @@ class LineChart extends React.Component {
     if (nextProps.data !== this.props.data) {
       this.setState(Object.assign({
         fadeAnim: new Animated.Value(0)
-      }, initData(nextProps.data, this.props.height, this.props.gap, this.props.numberOfYAxisGuideLine)), () => {
+      }, initData(nextProps.data, this.props.height, this.props.gap, this.props.numberOfYAxisGuideLine, this.props.maxValue)), () => {
         Animated.timing(this.state.fadeAnim, { toValue: 1, easing: Easing.bounce, duration: 1000, useNativeDriver: true }).start()
       })
     }
@@ -203,7 +202,6 @@ class LineChart extends React.Component {
       borderColor: !seriesColor ? this.props.primaryColor : seriesColor
     }
     let dataLength = data.length
-
     for (let i = 0; i < dataLength - 1; i++) {
       result.push(this.drawCoordinate(i, data[i], data[i + 1], '#FFFFFF00', lineStyle, false, false, seriesIndex))
     }
@@ -300,7 +298,7 @@ class LineChart extends React.Component {
           backgroundColor: this.props.backgroundColor
         }])}>
           <View style={styles.yAxisLabelsWrapper}>
-            {drawYAxisLabels(this.state.guideArray, this.props.height + 20, this.props.minValue, this.props.labelColor)}
+            {drawYAxisLabelsFrom0To100(this.props.maxValue, this.props.height+20, this.props.minValue, this.props.labelColor)}
 
           </View>
 
@@ -317,16 +315,16 @@ class LineChart extends React.Component {
                 <View ref='chartView' style={styles.chartViewWrapper}>
 
                   {drawYAxis(this.props.yAxisColor)}
-                  {drawGuideLine(this.state.guideArray, this.props.yAxisGridLineColor)}
+                  {drawGuideLineFrom0To100(this.props.height, this.props.maxValue, this.props.yAxisGridLineColor)}
                   {this.state.sortedData.map((obj, index) => {
                     return (
                       <Animated.View key={'animated_' + index} style={{
                         transform: [{scaleY: fadeAnim}],
                         flexDirection: 'row',
                         alignItems: 'flex-end',
-                        height: '100%',
+                        height: this.props.height+20,
                         position: index === 0 ? 'relative' : 'absolute',
-                        minWidth: 200,
+                        minWidth: 20,
                         marginBottom: this.props.minValue && this.state.guideArray && this.state.guideArray.length > 0 ? -1 * this.state.guideArray[0][2] * this.props.minValue : null
                       }} >
                         {this.drawCoordinates(obj.data, obj.seriesColor, index)}

@@ -64,7 +64,7 @@ function getMaxValue (data) {
   return Math.max.apply(null, values)
 }
 
-export const initData = (dataProp, height, gap, numberOfPoints = 5) => {
+export const initData = (dataProp, height, gap, numberOfPoints = 5, maxValue) => {
   let guideArray, max, sortedData
   if (!dataProp || !Array.isArray(dataProp) || dataProp.length === 0) {
     return {
@@ -74,7 +74,7 @@ export const initData = (dataProp, height, gap, numberOfPoints = 5) => {
     }
   }
 
-  max = getMaxValue(dataProp)
+  max = maxValue
   guideArray = getGuideArray(max, height, numberOfPoints)
 
   dataProp = flattenData(dataProp)
@@ -95,9 +95,11 @@ export const initData = (dataProp, height, gap, numberOfPoints = 5) => {
 
 export const refineData = (flattenData, max, height, gap) => {
   let result = []
-
+  console.log('height', height)
+  console.log('max', max)
   flattenData.map((series) => {
     let dataProp = series.data
+    // console.log('dataProp', dataProp)
     let object = {
       seriesName: series.seriesName,
       seriesColor: series.color
@@ -239,6 +241,42 @@ export const drawYAxis = (color = '#e0e0e0') => {
 
   )
 }
+export const drawYAxisLabelsFrom0To100 = (maxValue, height, minValue, color = '#000000') => {
+  const arr = [0,1,2,3,4,5,6,7,8,9,10]
+  return (
+    <View style={{
+      width: 33,
+      height: height,
+      justifyContent: 'flex-end',
+      alignItems: 'flex-end',
+      overflow: 'hidden'
+    }}>
+
+      {arr.length === 0 ? (
+        <View
+          key={'guide0'}
+          style={{
+            bottom: 0,
+            position: 'absolute'
+          }}>
+          <Text style={{fontSize: 11}}>0</Text>
+        </View>
+      ) : arr.map((v, i) => {
+        return (
+          <View
+            key={'guide' + i}
+            style={{
+              bottom: i === 0 ? -2 : (10 * v) / maxValue * (height - 20) - 5 ,
+              position: 'absolute'
+            }}>
+            <Text style={{fontSize: 11, color: color}}>{v*10}</Text>
+          </View>
+        )
+      })}
+
+    </View>
+  )
+}
 
 export const drawYAxisLabels = (arr, height, minValue, color = '#000000') => {
   return (
@@ -261,7 +299,7 @@ export const drawYAxisLabels = (arr, height, minValue, color = '#000000') => {
           <Text style={{fontSize: 11}}>0</Text>
         </View>
       ) : arr.map((v, i) => {
-        if (v[1] > height) return null
+        // if (v[1] > height) return null
         return (
           <View
             key={'guide' + i}
@@ -277,6 +315,34 @@ export const drawYAxisLabels = (arr, height, minValue, color = '#000000') => {
     </View>
   )
 }
+export const drawGuideLineFrom0To100 = (height, maxValue, color = '#e0e0e0') => {
+  arr = [0,1,2,3,4,5,6,7,8,9,10]
+  return (
+    <View style={{
+      width: '100%',
+      height: '100%',
+      position: 'absolute'
+    }}>
+
+      {arr.map((v, i) => {
+        console.log('v_LINE', (10 * v) / maxValue * height)
+        return (
+          <View
+            key={'guide' + i}
+            style={{
+              width: '100%',
+              borderTopWidth: 1,
+              borderTopColor: color,
+              bottom: (10 * v) / maxValue * height,
+              position: 'absolute'
+            }} />
+        )
+      })}
+
+    </View>
+  )
+}
+
 export const drawGuideLine = (arr, color = '#e0e0e0') => {
   return (
     <View style={{
