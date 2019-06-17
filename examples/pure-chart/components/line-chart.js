@@ -64,7 +64,7 @@ class LineChart extends React.Component {
     let angleRad = -1 * Math.atan2(dy, dx)
     let height
     let top
-    let topMargin = 70
+    let topMargin = 20
 
     if (start.ratioY > end.ratioY) {
       height = start.ratioY
@@ -116,6 +116,7 @@ class LineChart extends React.Component {
             if (emptyCount === this.state.sortedData.length) {
               return null
             }
+            // console.log('point', selectedIndex, point)
 
             this.setState({
               selectedIndex: selectedIndex
@@ -221,6 +222,7 @@ class LineChart extends React.Component {
     let lastCoordinate = Object.assign({}, data[dataLength - 1])
     lastCoordinate.gap = lastCoordinate.gap + this.props.gap
     result.push(this.drawCoordinate((dataLength), lastData, lastCoordinate, '#FFFFFF', {}, true, true, seriesIndex))
+
     return result
   }
 
@@ -291,7 +293,7 @@ class LineChart extends React.Component {
   }
 
   render () {
-    let {fadeAnim, sortedData} = this.state
+    let {fadeAnim} = this.state
     return (
       this.state.sortedData.length > 0 ? (
         <View style={StyleSheet.flatten([styles.wrapper, {
