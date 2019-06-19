@@ -269,7 +269,7 @@ export const drawYAxisLabelsFrom0To100 = (maxValue, height, minValue, color = '#
               bottom: i === 0 ? -2 : (10 * v) / maxValue * (height - 20) - 5 ,
               position: 'absolute'
             }}>
-            <Text style={{fontSize: 11, color: color}}>{v*10}</Text>
+            <Text style={{fontSize: 11, color: color}}>{v*10}%</Text>
           </View>
         )
       })}

@@ -275,7 +275,7 @@ class LineChart extends React.Component {
                       borderRadius: 2,
                       backgroundColor: !series.seriesColor ? this.props.primaryColor : series.seriesColor
                     }} />
-                    <Text style={styles.tooltipValue}>{numberWithCommas(dataObject.y, false)}</Text>
+                    <Text style={styles.tooltipValue}>{numberWithCommas(dataObject.y, false)}%</Text>
                   </View>
                 </View>
               )
